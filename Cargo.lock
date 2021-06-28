@@ -430,7 +430,7 @@ dependencies = [
  "ckb-logger",
  "ckb-spawn",
  "ckb-stop-handler",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -445,6 +445,7 @@ dependencies = [
  "ckb-dao-utils",
  "ckb-hash",
  "ckb-jsonrpc-types",
+ "ckb-launcher",
  "ckb-network",
  "ckb-resource",
  "ckb-shared",
@@ -515,6 +516,7 @@ dependencies = [
  "ckb-dao-utils",
  "ckb-error",
  "ckb-jsonrpc-types",
+ "ckb-launcher",
  "ckb-logger",
  "ckb-metrics",
  "ckb-network",
@@ -735,26 +737,33 @@ dependencies = [
  "ckb-async-runtime",
  "ckb-build-info",
  "ckb-chain",
+ "ckb-chain-spec",
  "ckb-channel",
  "ckb-db",
  "ckb-db-migration",
  "ckb-db-schema",
  "ckb-error",
+ "ckb-freezer",
  "ckb-jsonrpc-types",
  "ckb-logger",
  "ckb-migration-template",
  "ckb-network",
  "ckb-network-alert",
+ "ckb-notify",
  "ckb-proposal-table",
  "ckb-resource",
  "ckb-rpc",
  "ckb-shared",
+ "ckb-snapshot",
+ "ckb-stop-handler",
  "ckb-store",
  "ckb-sync",
+ "ckb-tx-pool",
  "ckb-types",
  "ckb-verification",
  "ckb-verification-traits",
  "num_cpus",
+ "tentacle",
 ]
 
 [[package]]
@@ -894,7 +903,7 @@ dependencies = [
  "rand_distr",
  "serde",
  "serde_json",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-compat-02",
 ]
 
@@ -937,7 +946,7 @@ dependencies = [
  "snap",
  "tempfile",
  "tentacle",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-util 0.6.6",
  "trust-dns-resolver",
 ]
@@ -1078,6 +1087,7 @@ dependencies = [
  "ckb-dao-utils",
  "ckb-error",
  "ckb-jsonrpc-types",
+ "ckb-launcher",
  "ckb-logger",
  "ckb-logger-service",
  "ckb-memory-tracker",
@@ -1239,7 +1249,6 @@ name = "ckb-shared"
 version = "0.44.0-pre"
 dependencies = [
  "arc-swap",
- "ckb-app-config",
  "ckb-async-runtime",
  "ckb-chain-spec",
  "ckb-channel",
@@ -1247,7 +1256,6 @@ dependencies = [
  "ckb-db",
  "ckb-db-schema",
  "ckb-error",
- "ckb-freezer",
  "ckb-logger",
  "ckb-notify",
  "ckb-proposal-table",
@@ -1289,7 +1297,7 @@ dependencies = [
  "ckb-channel",
  "ckb-logger",
  "parking_lot",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -1322,6 +1330,7 @@ dependencies = [
  "ckb-dao-utils",
  "ckb-db",
  "ckb-error",
+ "ckb-launcher",
  "ckb-logger",
  "ckb-metrics",
  "ckb-network",
@@ -1340,6 +1349,7 @@ dependencies = [
  "faux",
  "futures",
  "governor",
+ "keyed_priority_queue",
  "lru",
  "rand 0.7.3",
  "tempfile",
@@ -1404,7 +1414,7 @@ dependencies = [
  "ckb-verification",
  "faketime",
  "lru",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -1467,6 +1477,7 @@ dependencies = [
  "ckb-chain-spec",
  "ckb-dao",
  "ckb-error",
+ "ckb-launcher",
  "ckb-logger",
  "ckb-metrics",
  "ckb-reward-calculator",
@@ -1480,7 +1491,7 @@ dependencies = [
  "faketime",
  "rand 0.7.3",
  "rayon",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -2730,9 +2741,13 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "1.0.2"
+version = "1.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7e81a7c05f79578dbc15793d8b619db9ba32b4577003ef3af1a91c416798c58d"
+checksum = "824845a0bf897a9042383849b02c1bc219c2383772efcd5c6f9766fa4b81aef3"
+dependencies = [
+ "autocfg 1.0.0",
+ "hashbrown 0.9.1",
+]
 
 [[package]]
 name = "indicatif"
@@ -2982,6 +2997,15 @@ checksum = "7507624b29483431c0ba2d82aece8ca6cdba9382bff4ddd0f7490560c056098d"
 dependencies = [
  "winapi 0.2.8",
  "winapi-build",
+]
+
+[[package]]
+name = "keyed_priority_queue"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7a59df08c683d655315a5a674004a3da802743579069278fa07c37cf8a3e8d4"
+dependencies = [
+ "indexmap",
 ]
 
 [[package]]
@@ -4654,7 +4678,7 @@ dependencies = [
  "tentacle-multiaddr",
  "tentacle-secio",
  "thiserror",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-util 0.6.6",
  "tokio-yamux",
  "wasm-bindgen",
@@ -4694,7 +4718,7 @@ dependencies = [
  "ring",
  "secp256k1",
  "sha2",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-util 0.6.6",
  "unsigned-varint",
  "x25519-dalek",
@@ -4818,9 +4842,9 @@ dependencies = [
 
 [[package]]
 name = "tokio"
-version = "1.7.0"
+version = "1.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c79ba603c337335df6ba6dd6afc38c38a7d5e1b0c871678439ea973cd62a118e"
+checksum = "5fb2ed024293bb19f7a5dc54fe83bf86532a44c12a2bb8ba40d64a4509395ca2"
 dependencies = [
  "autocfg 1.0.0",
  "bytes 1.0.1",
@@ -4846,7 +4870,7 @@ dependencies = [
  "once_cell",
  "pin-project-lite 0.2.4",
  "tokio 0.2.25",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-stream",
 ]
 
@@ -4869,7 +4893,7 @@ checksum = "f8864d706fdb3cc0843a49647ac892720dac98a6eeb818b77190592cf4994066"
 dependencies = [
  "futures-core",
  "pin-project-lite 0.2.4",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -4907,7 +4931,7 @@ dependencies = [
  "futures-sink",
  "log",
  "pin-project-lite 0.2.4",
- "tokio 1.7.0",
+ "tokio 1.7.1",
 ]
 
 [[package]]
@@ -4920,7 +4944,7 @@ dependencies = [
  "futures",
  "log",
  "nohash-hasher",
- "tokio 1.7.0",
+ "tokio 1.7.1",
  "tokio-util 0.6.6",
 ]
 
