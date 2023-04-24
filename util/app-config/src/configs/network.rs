@@ -131,7 +131,7 @@ impl Default for HeaderMapConfig {
 }
 
 const fn default_memory_limit() -> ByteUnit {
-    ByteUnit::Megabyte(600)
+    ByteUnit::Megabyte(256)
 }
 
 #[derive(Clone, Debug, Copy, Eq, PartialEq, Serialize, Deserialize, Hash)]
