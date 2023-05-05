@@ -103,19 +103,20 @@ where
         {
             self.stats().tick_backend_delete();
         }
-        if let Some(view) = self.backend.remove(hash) {
+        if let Some(view) = self.backend.get(hash) {
             #[cfg(feature = "stats")]
             {
                 self.stats().tick_primary_insert();
             }
             self.memory.insert(view.clone());
+            self.backend.remove(hash);
             Some(view)
         } else {
             None
         }
     }
 
-    pub(crate) fn insert(&self, view: HeaderIndexView) -> Option<()> {
+    pub(crate) fn insert(&self, view: HeaderIndexView) {
         #[cfg(feature = "stats")]
         {
             self.trace();
@@ -134,13 +135,13 @@ where
         if self.backend.is_empty() {
             return;
         }
-        self.backend.remove_no_return(hash);
+        self.backend.remove(hash);
     }
 
     pub(crate) fn limit_memory(&self) {
         if let Some(values) = self.memory.front_n(self.memory_limit) {
             tokio::task::block_in_place(|| {
-                self.backend.insert_batch(&values);
+                self.backend.insert(&values);
             });
             self.memory
                 .remove_batch(values.iter().map(|value| value.hash()));

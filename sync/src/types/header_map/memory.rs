@@ -1,68 +1,9 @@
 use crate::types::{HeaderIndexView, SHRINK_THRESHOLD};
-use ckb_types::{
-    core::{BlockNumber, EpochNumberWithFraction},
-    packed::Byte32,
-    U256,
-};
+use ckb_types::packed::Byte32;
 use ckb_util::{shrink_to_fit, LinkedHashMap, RwLock};
 use std::default;
 
-#[derive(Clone, Debug, PartialEq, Eq)]
-struct HeaderIndexViewInner {
-    number: BlockNumber,
-    epoch: EpochNumberWithFraction,
-    timestamp: u64,
-    parent_hash: Byte32,
-    total_difficulty: U256,
-    skip_hash: Option<Byte32>,
-}
-
-impl From<(Byte32, HeaderIndexViewInner)> for HeaderIndexView {
-    fn from((hash, inner): (Byte32, HeaderIndexViewInner)) -> Self {
-        let HeaderIndexViewInner {
-            number,
-            epoch,
-            timestamp,
-            parent_hash,
-            total_difficulty,
-            skip_hash,
-        } = inner;
-        Self {
-            hash,
-            number,
-            epoch,
-            timestamp,
-            parent_hash,
-            total_difficulty,
-            skip_hash,
-        }
-    }
-}
-
-impl From<HeaderIndexView> for (Byte32, HeaderIndexViewInner) {
-    fn from(view: HeaderIndexView) -> Self {
-        let HeaderIndexView {
-            hash,
-            number,
-            epoch,
-            timestamp,
-            parent_hash,
-            total_difficulty,
-            skip_hash,
-        } = view;
-        (
-            hash,
-            HeaderIndexViewInner {
-                number,
-                epoch,
-                timestamp,
-                parent_hash,
-                total_difficulty,
-                skip_hash,
-            },
-        )
-    }
-}
+use super::HeaderIndexViewInner;
 
 pub(crate) struct MemoryMap(RwLock<LinkedHashMap<Byte32, HeaderIndexViewInner>>);
 
@@ -90,10 +31,10 @@ impl MemoryMap {
             .map(|inner| (key.clone(), inner).into())
     }
 
-    pub(crate) fn insert(&self, header: HeaderIndexView) -> Option<()> {
+    pub(crate) fn insert(&self, header: HeaderIndexView) {
         let mut guard = self.0.write();
         let (key, value) = header.into();
-        guard.insert(key, value).map(|_| ())
+        guard.insert(key, value);
     }
 
     pub(crate) fn remove(&self, key: &Byte32) -> Option<HeaderIndexView> {

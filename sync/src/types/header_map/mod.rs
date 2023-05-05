@@ -1,6 +1,11 @@
 use ckb_async_runtime::Handle;
 use ckb_stop_handler::{SignalSender, StopHandler};
-use ckb_types::packed::Byte32;
+use ckb_types::{
+    core::{BlockNumber, EpochNumberWithFraction},
+    packed::{Byte32, Byte32Reader},
+    prelude::{Entity, FromSliceShouldBeOk, Reader},
+    U256,
+};
 use std::path;
 use std::sync::Arc;
 use std::time::Duration;
@@ -8,19 +13,113 @@ use tokio::sync::oneshot;
 use tokio::time::MissedTickBehavior;
 
 mod backend;
-mod backend_sled;
+mod backend_heed;
 mod kernel_lru;
 mod memory;
 
 pub(crate) use self::{
-    backend::KeyValueBackend, backend_sled::SledBackend, kernel_lru::HeaderMapKernel,
+    backend::KeyValueBackend, backend_heed::HeedBackend, kernel_lru::HeaderMapKernel,
     memory::MemoryMap,
 };
 
 use super::HeaderIndexView;
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct HeaderIndexViewInner {
+    number: BlockNumber,
+    epoch: EpochNumberWithFraction,
+    timestamp: u64,
+    parent_hash: Byte32,
+    total_difficulty: U256,
+    skip_hash: Option<Byte32>,
+}
+
+impl HeaderIndexViewInner {
+    fn to_vec(&self) -> Vec<u8> {
+        let mut v = Vec::new();
+        v.extend_from_slice(self.number.to_le_bytes().as_slice());
+        v.extend_from_slice(self.epoch.full_value().to_le_bytes().as_slice());
+        v.extend_from_slice(self.timestamp.to_le_bytes().as_slice());
+        v.extend_from_slice(self.parent_hash.as_slice());
+        v.extend_from_slice(self.total_difficulty.to_le_bytes().as_slice());
+        if let Some(ref skip_hash) = self.skip_hash {
+            v.extend_from_slice(skip_hash.as_slice());
+        }
+        v
+    }
+
+    fn from_slice_should_be_ok(slice: &[u8]) -> Self {
+        let number = BlockNumber::from_le_bytes(slice[0..8].try_into().expect("stored slice"));
+        let epoch = EpochNumberWithFraction::from_full_value(u64::from_le_bytes(
+            slice[8..16].try_into().expect("stored slice"),
+        ));
+        let timestamp = u64::from_le_bytes(slice[16..24].try_into().expect("stored slice"));
+        let parent_hash = Byte32Reader::from_slice_should_be_ok(&slice[24..56]).to_entity();
+        let total_difficulty = U256::from_little_endian(&slice[56..88]).expect("stored slice");
+        let skip_hash = if slice.len() == 120 {
+            Some(Byte32Reader::from_slice_should_be_ok(&slice[88..120]).to_entity())
+        } else {
+            None
+        };
+        Self {
+            number,
+            epoch,
+            timestamp,
+            parent_hash,
+            total_difficulty,
+            skip_hash,
+        }
+    }
+}
+
+impl From<(Byte32, HeaderIndexViewInner)> for HeaderIndexView {
+    fn from((hash, inner): (Byte32, HeaderIndexViewInner)) -> Self {
+        let HeaderIndexViewInner {
+            number,
+            epoch,
+            timestamp,
+            parent_hash,
+            total_difficulty,
+            skip_hash,
+        } = inner;
+        Self {
+            hash,
+            number,
+            epoch,
+            timestamp,
+            parent_hash,
+            total_difficulty,
+            skip_hash,
+        }
+    }
+}
+
+impl From<HeaderIndexView> for (Byte32, HeaderIndexViewInner) {
+    fn from(view: HeaderIndexView) -> Self {
+        let HeaderIndexView {
+            hash,
+            number,
+            epoch,
+            timestamp,
+            parent_hash,
+            total_difficulty,
+            skip_hash,
+        } = view;
+        (
+            hash,
+            HeaderIndexViewInner {
+                number,
+                epoch,
+                timestamp,
+                parent_hash,
+                total_difficulty,
+                skip_hash,
+            },
+        )
+    }
+}
 pub struct HeaderMap {
-    inner: Arc<HeaderMapKernel<SledBackend>>,
+    inner: Arc<HeaderMapKernel<HeedBackend>>,
     stop: StopHandler<()>,
 }
 
@@ -81,7 +180,7 @@ impl HeaderMap {
         self.inner.get(hash)
     }
 
-    pub(crate) fn insert(&self, view: HeaderIndexView) -> Option<()> {
+    pub(crate) fn insert(&self, view: HeaderIndexView) {
         self.inner.insert(view)
     }
 

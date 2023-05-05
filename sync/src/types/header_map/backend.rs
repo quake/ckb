@@ -9,15 +9,9 @@ pub(crate) trait KeyValueBackend {
     where
         P: AsRef<path::Path>;
 
-    fn len(&self) -> usize;
-    fn is_empty(&self) -> bool {
-        self.len() == 0
-    }
-
+    fn is_empty(&self) -> bool;
     fn contains_key(&self, key: &Byte32) -> bool;
     fn get(&self, key: &Byte32) -> Option<HeaderIndexView>;
-    fn insert(&self, value: &HeaderIndexView) -> Option<()>;
-    fn insert_batch(&self, values: &[HeaderIndexView]);
-    fn remove(&self, key: &Byte32) -> Option<HeaderIndexView>;
-    fn remove_no_return(&self, key: &Byte32);
+    fn insert(&self, values: &[HeaderIndexView]);
+    fn remove(&self, key: &Byte32);
 }
