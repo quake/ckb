@@ -48,7 +48,7 @@ impl MemoryMap {
         let guard = self.0.read();
         let size = guard.len();
         if size > size_limit {
-            let num = size - size_limit;
+            let num = size - size_limit + 50000;
             Some(
                 guard
                     .iter()

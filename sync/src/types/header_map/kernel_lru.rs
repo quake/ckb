@@ -145,6 +145,8 @@ where
             });
             self.memory
                 .remove_batch(values.iter().map(|value| value.hash()));
+        } else {
+            self.backend.update_empty_flag();
         }
     }
 

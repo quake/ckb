@@ -10,6 +10,8 @@ pub(crate) trait KeyValueBackend {
         P: AsRef<path::Path>;
 
     fn is_empty(&self) -> bool;
+    fn update_empty_flag(&self);
+
     fn contains_key(&self, key: &Byte32) -> bool;
     fn get(&self, key: &Byte32) -> Option<HeaderIndexView>;
     fn insert(&self, values: &[HeaderIndexView]);

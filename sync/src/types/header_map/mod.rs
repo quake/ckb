@@ -129,7 +129,8 @@ impl Drop for HeaderMap {
     }
 }
 
-const INTERVAL: Duration = Duration::from_millis(500);
+// on an average machine, 2000ms is about 10000~20000 headers processing time
+const INTERVAL: Duration = Duration::from_millis(2000);
 // HeaderIndexView size is 152 bytes
 const ITEM_BYTES_SIZE: usize = 152;
 const WARN_THRESHOLD: usize = ITEM_BYTES_SIZE * 100_000;

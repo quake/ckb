@@ -98,6 +98,21 @@ impl KeyValueBackend for HeedBackend {
         self.empty_flag.load(Ordering::SeqCst)
     }
 
+    fn update_empty_flag(&self) {
+        let txn = self
+            .env
+            .read_txn()
+            .expect("failed to create read transaction");
+        if self
+            .db
+            .is_empty(&txn)
+            .expect("failed to check if db is empty")
+        {
+            self.empty_flag.store(true, Ordering::SeqCst);
+        }
+        let _ignore = self.env.force_sync();
+    }
+
     fn contains_key(&self, key: &Byte32) -> bool {
         let txn = self
             .env
@@ -143,13 +158,6 @@ impl KeyValueBackend for HeedBackend {
         self.db
             .delete(&mut txn, key)
             .expect("failed to remove header from disk headermap");
-        if self
-            .db
-            .is_empty(&txn)
-            .expect("failed to check if db is empty")
-        {
-            self.empty_flag.store(true, Ordering::SeqCst);
-        }
         txn.commit().expect("failed to commit write transaction");
     }
 }
