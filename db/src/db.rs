@@ -62,6 +62,7 @@ impl RocksDB {
 
         opts.create_if_missing(true);
         opts.create_missing_column_families(true);
+        opts.enable_statistics();
 
         let db = OptimisticTransactionDB::open_cf_descriptors(&opts, &config.path, cf_descriptors)
             .map_err(|err| internal_error(format!("failed to open database: {err}")))?;
