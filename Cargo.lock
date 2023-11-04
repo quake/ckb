@@ -860,6 +860,9 @@ name = "ckb-indexer-r"
 version = "0.113.0-pre"
 dependencies = [
  "ckb-indexer-sync",
+ "ckb-jsonrpc-types",
+ "ckb-notify",
+ "thiserror",
 ]
 
 [[package]]
@@ -1303,6 +1306,7 @@ dependencies = [
  "ckb-dao-utils",
  "ckb-error",
  "ckb-indexer",
+ "ckb-indexer-r",
  "ckb-indexer-sync",
  "ckb-jsonrpc-types",
  "ckb-logger",
