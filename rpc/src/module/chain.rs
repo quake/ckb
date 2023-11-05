@@ -6,7 +6,7 @@ use ckb_jsonrpc_types::{
     ResponseFormat, ResponseFormatInnerType, Timestamp, Transaction, TransactionAndWitnessProof,
     TransactionProof, TransactionWithStatusResponse, Uint32, Uint64,
 };
-use ckb_logger::error;
+use ckb_logger::{error, info};
 use ckb_reward_calculator::RewardCalculator;
 use ckb_shared::{shared::Shared, Snapshot};
 use ckb_store::{data_loader_wrapper::AsDataLoader, ChainStore};
@@ -2175,6 +2175,11 @@ impl ChainRpcImpl {
                             .and_then(|v| v.get(tx_info.index.saturating_sub(1)).copied())
                     })
             };
+
+            for out_point in tx.output_pts() {
+                let cell_meta = snapshot.get_cell(&out_point).unwrap();
+                info!("cell_meta {:?}", cell_meta);
+            }
 
             return Ok(TransactionWithStatus::with_committed(
                 Some(tx),
