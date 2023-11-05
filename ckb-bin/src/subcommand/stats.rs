@@ -16,6 +16,7 @@ pub fn stats(args: StatsArgs, async_handle: Handle) -> Result<(), ExitCode> {
     let stats = Statics::build(args, async_handle)?;
     stats.print_uncle_rate()?;
     stats.print_miner_statics()?;
+    stats.debug_block_exts()?;
     Ok(())
 }
 
@@ -46,6 +47,20 @@ impl Statics {
         }
 
         Ok(Statics { shared, from, to })
+    }
+
+    pub fn debug_block_exts(&self) -> Result<(), ExitCode> {
+        let store = self.shared.store();
+        for i in self.from..=self.to {
+            let hash = store
+                .get_block_hash(i)
+                .ok_or_else(|| ExitCode::IO)?;
+            let ext = store
+                .get_block_ext(&hash)
+                .ok_or_else(|| ExitCode::IO)?;
+            println!("block_ext: {} => {:?}", i, ext);
+        }
+        Ok(())
     }
 
     // exclusively below and above inclusively (from..to]
