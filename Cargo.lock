@@ -891,6 +891,7 @@ dependencies = [
  "sql-builder",
  "sqlx",
  "thiserror",
+ "tokio",
 ]
 
 [[package]]
