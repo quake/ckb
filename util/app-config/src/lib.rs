@@ -98,6 +98,7 @@ impl Setup {
             overwrite_chain_spec: matches.get_flag(cli::ARG_OVERWRITE_CHAIN_SPEC),
             chain_spec_hash,
             indexer: matches.get_flag(cli::ARG_INDEXER),
+            indexer_r: matches.get_flag(cli::ARG_INDEXER_R),
         })
     }
 
