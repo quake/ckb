@@ -1,5 +1,6 @@
 use crate::node::{connect_all, waiting_for_sync};
 use crate::util::cell::gen_spendable;
+use crate::util::check::is_transaction_committed;
 use crate::util::mining::out_ibd_mode;
 use crate::util::transaction::{always_success_transaction, always_success_transactions};
 use crate::utils::{build_relay_tx_hashes, build_relay_txs, sleep, wait_until};
@@ -9,10 +10,11 @@ use ckb_jsonrpc_types::Status;
 use ckb_logger::info;
 use ckb_network::SupportProtocols;
 use ckb_types::{
-    core::{capacity_bytes, Capacity, TransactionBuilder},
-    packed::{CellOutputBuilder, GetRelayTransactions, RelayMessage},
+    core::{capacity_bytes, Capacity, TransactionBuilder, TransactionView},
+    packed::{self, CellOutputBuilder, GetRelayTransactions, RelayMessage},
     prelude::*,
 };
+use ckb_hash::blake2b_256;
 
 pub struct TransactionRelayBasic;
 
@@ -313,5 +315,57 @@ impl Spec for TransactionRelayConflict {
                 .is_some()
         });
         assert!(relayed, "Transaction should be relayed to node1");
+    }
+}
+
+pub struct VmCrashTransactionRelay;
+
+impl Spec for VmCrashTransactionRelay {
+    fn run(&self, nodes: &mut Vec<Node>) {
+        let node = nodes.pop().unwrap();
+        let inputs = gen_spendable(&node, 2)
+            .into_iter()
+            .map(|input| packed::CellInput::new(input.out_point, 0))
+            .collect::<Vec<_>>();
+
+        let data: packed::Bytes = include_bytes!("../../../../script/testdata/crash").pack();
+        let cell_output = CellOutputBuilder::default()
+            .build_exact_capacity(Capacity::bytes(data.len()).unwrap())
+            .unwrap();
+
+        let tx_template = TransactionView::new_advanced_builder();
+        let deploy_tx = tx_template
+            .cell_dep(node.always_success_cell_dep())
+            .input(inputs[0].clone())
+            .output(cell_output)
+            .output_data(data.clone())
+            .build();
+
+        node.submit_transaction(&deploy_tx);
+        node.mine_until_bool(|| is_transaction_committed(&node, &deploy_tx));
+        println!("deploy tx hash: {:?}", deploy_tx.hash());
+
+        let script = packed::Script::new_builder()
+            .code_hash(blake2b_256(&data.raw_data()).pack())
+            .build();
+        let cell_output = CellOutputBuilder::default()
+            .type_(Some(script).pack())
+            .build_exact_capacity(Capacity::bytes(0).unwrap())
+            .unwrap();
+
+        let tx_template = TransactionView::new_advanced_builder();
+        let crash_tx = tx_template
+            .cell_dep(node.always_success_cell_dep())
+            .cell_dep(
+                packed::CellDep::new_builder()
+                    .out_point(packed::OutPoint::new(deploy_tx.hash(), 0))
+                    .build(),
+            )
+            .input(inputs[1].clone())
+            .output(cell_output)
+            .output_data(Default::default())
+            .build();
+        node.submit_transaction(&crash_tx);
+        node.mine_until_bool(|| is_transaction_committed(&node, &crash_tx));
     }
 }

@@ -447,6 +447,7 @@ fn all_specs() -> Vec<Box<dyn Spec>> {
         Box::new(TransactionRelayTimeout),
         Box::new(TransactionRelayEmptyPeers),
         Box::new(TransactionRelayConflict),
+        Box::new(VmCrashTransactionRelay),
         Box::new(Discovery),
         Box::new(Disconnect),
         Box::new(MalformedMessage),

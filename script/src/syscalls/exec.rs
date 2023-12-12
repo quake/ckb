@@ -12,7 +12,7 @@ use ckb_vm::{
     registers::{A0, A1, A2, A3, A4, A5, A7},
     Error as VMError, Register, SupportMachine, Syscalls,
 };
-use ckb_vm::{DEFAULT_STACK_SIZE, RISCV_MAX_MEMORY};
+// use ckb_vm::{DEFAULT_STACK_SIZE, RISCV_MAX_MEMORY};
 use std::sync::Arc;
 
 #[derive(Debug)]
@@ -186,19 +186,19 @@ impl<Mac: SupportMachine, DL: CellDataProvider + Send + Sync> Syscalls<Mac> for 
             }
         }
 
-        match machine.initialize_stack(
-            &argv,
-            (RISCV_MAX_MEMORY - DEFAULT_STACK_SIZE) as u64,
-            DEFAULT_STACK_SIZE as u64,
-        ) {
-            Ok(size) => {
-                machine.add_cycles_no_checking(transferred_byte_cycles(size))?;
-            }
-            Err(_) => {
-                machine.set_register(A0, Mac::REG::from_u8(WRONG_FORMAT));
-                return Ok(true);
-            }
-        }
+        // match machine.initialize_stack(
+        //     &argv,
+        //     (RISCV_MAX_MEMORY - DEFAULT_STACK_SIZE) as u64,
+        //     DEFAULT_STACK_SIZE as u64,
+        // ) {
+        //     Ok(size) => {
+        //         machine.add_cycles_no_checking(transferred_byte_cycles(size))?;
+        //     }
+        //     Err(_) => {
+        //         machine.set_register(A0, Mac::REG::from_u8(WRONG_FORMAT));
+        //         return Ok(true);
+        //     }
+        // }
         Ok(true)
     }
 }
