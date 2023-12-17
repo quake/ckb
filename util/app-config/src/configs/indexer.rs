@@ -1,4 +1,4 @@
-use super::indexer_r::{DBDriver, IndexerRConfig};
+use super::rich_indexer::{DBDriver, RichIndexerConfig};
 use serde::{Deserialize, Serialize};
 use std::num::NonZeroUsize;
 use std::path::{Path, PathBuf};
@@ -30,9 +30,9 @@ pub struct IndexerConfig {
     /// Maximal db info log files to be kept.
     #[serde(default)]
     pub db_keep_log_file_num: Option<NonZeroUsize>,
-    /// IndexerR config options
+    /// Rich indexer config options
     #[serde(default)]
-    pub indexer_r: IndexerRConfig,
+    pub rich_indexer: RichIndexerConfig,
 }
 
 const fn default_poll_interval() -> u64 {
@@ -50,7 +50,7 @@ impl Default for IndexerConfig {
             cell_filter: None,
             db_background_jobs: None,
             db_keep_log_file_num: None,
-            indexer_r: IndexerRConfig::default(),
+            rich_indexer: RichIndexerConfig::default(),
         }
     }
 }
@@ -62,7 +62,7 @@ impl IndexerConfig {
     ///
     /// If `self.secondary_path` is not set, set it to `data_dir / indexer / secondary_path`.
     ///
-    /// If `self.indexer_r` is `Sqlite`, and `self.indexer_r.sqlite.store` is not set,
+    /// If `self.rich_indexer` is `Sqlite`, and `self.rich_indexer.sqlite.store` is not set,
     /// set it to `data_dir / indexer / sqlite / sqlite.db`.
     ///
     /// If any of the above paths is relative, convert them to absolute path using
@@ -75,11 +75,11 @@ impl IndexerConfig {
             &mut self.secondary_path,
             "secondary_path",
         );
-        if let DBDriver::Sqlite = &mut self.indexer_r.db_type {
+        if let DBDriver::Sqlite = &mut self.rich_indexer.db_type {
             _adjust(
                 root_dir,
                 indexer_dir.as_ref(),
-                &mut self.indexer_r.store,
+                &mut self.rich_indexer.store,
                 "sqlite/sqlite.db",
             );
         }
