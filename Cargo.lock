@@ -911,7 +911,6 @@ dependencies = [
  "ckb-logger",
  "ckb-network",
  "ckb-network-alert",
- "ckb-proposal-table",
  "ckb-resource",
  "ckb-rpc",
  "ckb-shared",
@@ -1291,7 +1290,6 @@ dependencies = [
  "ckb-async-runtime",
  "ckb-chain",
  "ckb-chain-spec",
- "ckb-channel",
  "ckb-constant",
  "ckb-dao",
  "ckb-dao-utils",
@@ -1457,7 +1455,6 @@ name = "ckb-sync"
 version = "0.114.0-pre"
 dependencies = [
  "ckb-app-config",
- "ckb-async-runtime",
  "ckb-chain",
  "ckb-chain-spec",
  "ckb-channel",
