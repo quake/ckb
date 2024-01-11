@@ -632,7 +632,6 @@ dependencies = [
  "ckb-chain-spec",
  "ckb-channel",
  "ckb-constant",
- "ckb-dao",
  "ckb-dao-utils",
  "ckb-error",
  "ckb-jsonrpc-types",
