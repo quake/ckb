@@ -1378,6 +1378,7 @@ dependencies = [
  "ckb-db-schema",
  "ckb-error",
  "ckb-logger",
+ "ckb-metrics",
  "ckb-migrate",
  "ckb-network",
  "ckb-notify",
