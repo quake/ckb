@@ -1064,7 +1064,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-hash"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "blake2b-ref",
  "blake2b-rs",
@@ -1922,7 +1922,6 @@ dependencies = [
  "ckb-fixed-hash",
  "linked-hash-map",
  "parking_lot 0.12.3",
- "regex",
 ]
 
 [[package]]

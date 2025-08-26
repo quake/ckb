@@ -159,7 +159,7 @@ ckb-fixed-hash-core = { path = "util/fixed-hash/core", version = "=0.203.0-pre" 
 ckb-fixed-hash-macros = { path = "util/fixed-hash/macros", version = "=0.203.0-pre" }
 ckb-freezer = { path = "freezer", version = "=0.203.0-pre" }
 ckb-gen-types = { path = "util/gen-types", version = "=0.203.0-pre" }
-ckb-hash = { path = "util/hash", default-features = false, version = "=0.203.0-pre" }
+ckb-hash = { path = "util/hash", default-features = false, version = "1" }
 ckb-indexer = { path = "util/indexer", version = "=0.203.0-pre" }
 ckb-indexer-sync = { path = "util/indexer-sync", version = "=0.203.0-pre" }
 ckb-instrument = { path = "util/instrument", version = "=0.203.0-pre" }
