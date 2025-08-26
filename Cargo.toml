@@ -140,7 +140,7 @@ ckb-app-config = { path = "util/app-config", version = "=0.203.0-pre" }
 ckb-async-runtime = { path = "util/runtime", version = "=0.203.0-pre" }
 ckb-bin = { path = "ckb-bin", version = "=0.203.0-pre" }
 ckb-block-filter = { path = "block-filter", version = "=0.203.0-pre" }
-ckb-build-info = { path = "util/build-info", version = "=0.203.0-pre" }
+ckb-build-info = { path = "util/build-info", version = "1" }
 ckb-chain = { path = "chain", version = "=0.203.0-pre" }
 ckb-chain-iter = { path = "util/chain-iter", version = "=0.203.0-pre" }
 ckb-chain-spec = { path = "spec", version = "=0.203.0-pre" }

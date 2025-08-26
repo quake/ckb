@@ -828,7 +828,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-build-info"
-version = "0.203.0-pre"
+version = "1.0.0"
 
 [[package]]
 name = "ckb-chain"
