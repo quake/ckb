@@ -1004,7 +1004,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-fixed-hash"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-fixed-hash-core",
  "ckb-fixed-hash-macros",
@@ -1012,7 +1012,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-fixed-hash-core"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb_schemars",
  "faster-hex",
@@ -1023,7 +1023,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-fixed-hash-macros"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-fixed-hash-core",
  "proc-macro2",
@@ -1425,7 +1425,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-occupied-capacity"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-occupied-capacity-core",
  "ckb-occupied-capacity-macros",
@@ -1433,14 +1433,14 @@ dependencies = [
 
 [[package]]
 name = "ckb-occupied-capacity-core"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "ckb-occupied-capacity-macros"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-occupied-capacity-core",
  "quote",
@@ -1894,7 +1894,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-types"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "bit-vec 0.6.3",
  "bytes",
