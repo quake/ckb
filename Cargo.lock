@@ -908,7 +908,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-constant"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "phf 0.12.1",
 ]
@@ -983,7 +983,7 @@ version = "0.203.0-pre"
 
 [[package]]
 name = "ckb-error"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "anyhow",
  "ckb-occupied-capacity",
@@ -1049,7 +1049,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-gen-types"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "cfg-if",
  "ckb-error",
@@ -1470,7 +1470,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-rational"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "numext-fixed-uint",
  "proptest",
