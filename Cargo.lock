@@ -941,7 +941,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-dao-utils"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "byteorder",
  "ckb-error",
@@ -1845,7 +1845,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-traits"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-types",
 ]
