@@ -879,7 +879,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-chain-spec"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "cacache",
  "ckb-constant",
@@ -915,7 +915,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-crypto"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-fixed-hash",
  "faster-hex",
@@ -1479,7 +1479,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-resource"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "ckb-system-scripts",
  "ckb-types",
@@ -1612,7 +1612,7 @@ dependencies = [
 
 [[package]]
 name = "ckb-script"
-version = "0.203.0-pre"
+version = "1.0.0"
 dependencies = [
  "byteorder",
  "ckb-chain-spec",
